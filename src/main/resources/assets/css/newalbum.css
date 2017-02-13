@@ -1,0 +1,114 @@
+.new-album-dialog-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    pointer-events: none;
+}
+.new-album-dialog-container.visible {
+    pointer-events: bounding-box;
+    opacity: 1;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 100;
+}
+
+.new-album-dialog-container.visible .new-album-dialog {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.new-album-dialog {
+    opacity: 0;
+    color: white;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    position: absolute;
+    height: 200px;
+    width: 400px;
+    padding: 20px;
+    left: 50%;
+    top: 50%;
+    margin-left: -200px;
+    margin-top: -140px;
+    background-color: #333333;
+    -webkit-box-shadow: 5px 5px 25px 0px rgba(0, 0, 0, 0.75);
+    -moz-box-shadow: 5px 5px 25px 0px rgba(0, 0, 0, 0.75);
+    box-shadow: 5px 5px 25px 0px rgba(0, 0, 0, 0.75);
+    border-radius: 5px;
+    pointer-events: none;
+}
+
+.new-album-dialog h2 {
+    margin: 0;
+    margin-left: 10px;
+}
+
+.new-album-dialog button {
+    padding: 10px;
+    width: 100px;
+    font-size: 16px;
+    cursor: pointer;
+    border: none;
+}
+
+.new-album-dialog form > div {
+    margin: 20px 10px;
+}
+
+.new-album-dialog label {
+    line-height: 35px;
+}
+
+.new-album-dialog input[type="text"] {
+    height: 30px;
+    font-size: 16px;
+    width: 100%;
+    padding-left: 4px;
+}
+
+.new-album-dialog .button-toolbar {
+    text-align: right;
+    margin-top: 40px;
+    margin-left: 0;
+}
+
+.new-album-dialog .button-toolbar .button-create {
+    margin-left: 15px;
+    font-weight: bold;
+}
+
+.new-album-dialog .button-toolbar .button-create[disabled] {
+    pointer-events: none;
+}
+
+.new-album-dialog .button-toolbar button {
+    padding: 8px;
+}
+
+.new-album-footer {
+    position: absolute;
+    bottom: 0px;
+    width: 100%;
+    height: 40px;
+    text-align: center;
+    font-size: 18px;
+    background: #4294de;
+    color: white;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    transition: opacity 500ms;
+    opacity: 0;
+    display: none;
+}
+.new-album-footer p {
+    margin: 0;
+    margin-top: 10px;
+}
+.new-album-dialog-container.select-files .new-album-footer {
+    display: block;
+    opacity: 1;
+}
+
+.new-album-dialog-container.select-files .new-album-dialog {
+    display: none;
+}

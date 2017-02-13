@@ -1,0 +1,70 @@
+<div class="main-container init">
+
+    <h1 id="album-title">{{albumName}}</h1>
+    <div class="search">
+        <form>
+            {{#albumId}}
+                <a id="show-albums-link" href="{{homePageUrl}}">
+            {{/albumId}}
+            {{^albumId}}
+                <a id="show-albums-link" href="#" onclick="showAlbums(); return false;">
+            {{/albumId}}
+            <img src="{{assetUrl}}/img/arrow-left.svg" title="Back to albums" class="icon-back">
+            </a>
+            <input name="search" class="search-input" type="text" placeholder="Search our library for amazing photos, places or authors">
+            <img class="search-button" src="{{assetUrl}}/img/search-icon.svg">
+        </form>
+        <h3 id="search-results-span">Your search produced no results</h3>
+    </div>
+    <div id="browse-albums">
+        <div class="browse">
+            <div class="album new-album">
+                <div class="empty-album" onclick="openNewAlbumDialog(this);" >
+                    <img src="{{assetUrl}}/img/plus.svg">
+                    <p>Create a new album</p>
+                </div>
+                <div class="album-name">
+                    <p id="album-name-span-new" class="album-name-span hidden"></p>
+                </div>
+            </div>
+        {{#albums}}
+            <div class="album">
+                {{#imageUrl}}
+                <a href="#" onclick="openAlbum('{{albumId}}');"><div class="image-stack {{stackType}}"><img src="{{imageUrl}}"></div></a>
+                {{/imageUrl}}
+                {{^imageUrl}}
+                <div class="empty-album"></div>
+                {{/imageUrl}}
+                <div class="album-name">
+                    <p id="album-name-span-{{albumId}}" class="album-name-span" onclick="editAlbumName('{{albumId}}');">{{displayName}}</p>
+                    <input id="album-name-input-{{albumId}}" type="text" class="album-name-input" value="{{displayName}}">
+                </div>
+            </div>
+        {{/albums}}
+        </div>
+    </div>
+    <div id="browse-images"></div>
+</div>
+
+<div class="new-album-dialog-container">
+    <div class="new-album-dialog">
+        <h2>New album</h2>
+        <form action="{{imageCreationServiceUrl}}" method="post" enctype="multipart/form-data">
+            <div>
+                <label>Enter a name for this album</label><br>
+                <input name="albumName" type="text" placeholder="Title" onkeyup="validateForm()">
+            </div>
+
+            <input name="file" type="file" multiple="multiple" accept="image/*" style="display: none;" onchange="createNewAlbum(this.parentElement);">
+
+            <div class="button-toolbar">
+                <button type="reset" class="button-cancel" onclick="closeNewAlbumDialog();">Cancel</button>
+                <button class="button-create" onclick="return openFileUploadDialog();" disabled>Create</button>
+            </div>
+
+        </form>
+    </div>
+    <div class="new-album-footer">
+        <p class="button-toolbar-text">Please select images in the dialog above...</p>
+    </div>
+</div>

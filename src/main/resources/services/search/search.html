@@ -1,0 +1,20 @@
+{{#searchQuery}}
+<h4>Your search {{#albumName}}in album "{{albumName}}" {{/albumName}}produced {{imageCount}} results</h4>
+{{/searchQuery}}
+<div class="browse">
+    {{#images}}
+    <figure class="album">
+        <a href="{{imagePageUrl}}" target="_blank">
+            <img src="{{imageUrl}}">
+        </a>
+        <figcaption class="image-caption">
+            {{#caption}}<b>{{.}}</b>{{/caption}}
+            <p class="image-caption-span">{{#artist}}by {{.}}{{/artist}}
+                {{#copyright}}<em>
+            <small>&copy; {{.}}</small>
+        </em>{{/copyright}}</p>
+        </figcaption>
+
+    </figure>
+    {{/images}}
+</div>

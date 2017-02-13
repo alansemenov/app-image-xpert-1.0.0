@@ -1,0 +1,12 @@
+This application is using the following third party software:
+
+Google Maps JavaScript API v3
+  https://developers.google.com/maps/documentation/javascript/
+  License: CC BY 3.0 http://creativecommons.org/licenses/by/3.0/
+
+
+This application is using artwork from the following third party provider:
+
+IcoMoon icons (Ultimate Pack)
+  Need seperate development licenses for developing software using the icons.
+  https://icomoon.io/#icons-icomoon/license

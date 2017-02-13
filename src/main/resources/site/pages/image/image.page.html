@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Image XPert / {{caption}}</title>
+    <link rel="stylesheet" href="{{assetUrl}}/css/image.css" type="text/css"/>
+    <script type="text/javascript" src="{{assetUrl}}/js/image.js"></script>
+
+    <script type="text/javascript">
+        var imgPlaceholder;
+        var updateMetaServiceUrl = '{{updateMetaServiceUrl}}';
+
+        var scaleImage = debounce(function() {
+            if (imgPlaceholder) {
+                var img = document.querySelector(".fake-image");
+                var imgUrl = imgPlaceholder.getAttribute("data-src").replace("block-1-1", "block-" + window.innerWidth + "-" + window.innerHeight);
+                img.src = imgUrl;
+            }
+        }, 150);
+
+        window.onload = function() {
+            imgPlaceholder = document.querySelector(".image-placeholder");
+
+            loadImage();
+        }
+    </script>
+</head>
+
+<body onresize="loadImage()">
+<div id="main-region">
+    <div class="main-container">
+        <img class="fake-image" src="" onload="syncImage()">
+        <div class="image-info-overlay-gradient"></div>
+        <div class="image-info-overlay"></div>
+        <div class="image-placeholder" data-src="{{imageUrl}}"></div>
+        <div class="image-header">
+            <div class="image-header-icons">
+                <img src="{{assetUrl}}/img/download_image.svg" title="Download image" onclick="toggleClass('download');" class="icon-download">
+                <img src="{{assetUrl}}/img/info.svg" title="Image info" onclick="toggleClass('info');" class="icon-info">
+                <img src="{{assetUrl}}/img/cancel.svg" title="Close info" onclick="toggleClass();" class="icon-close">
+            </div>
+        </div>
+    </div>
+
+    <div class="download-container">
+        <h2>Download image</h2>
+
+        <form class="download-form" action="" method="post" onsubmit="return requestImage('{{downloadImageServiceUrl}}', this);">
+            <div class="fieldset-container">
+                <fieldset>
+                    <legend>Specify size</legend>
+
+                    <label>Original:
+                        <input type="radio" name="size" value="original" checked>
+                    </label>
+                    <span class="size-text">{{imageWidth}}&nbsp;&nbsp;&nbsp;X&nbsp;&nbsp;&nbsp;{{imageHeight}}</span>
+                    <br>
+                    <div class="size-container">
+                        <div class="input-size-label">
+                            <label>Custom:&nbsp;
+                                <input type="radio" name="size" value="custom">
+                            </label>
+                        </div>
+                        <div class="input-size">
+                            <input type="text" name="width" placeholder="width"><br>
+                            <span>px</span>
+                        </div>
+                        <span>&nbsp;X&nbsp;</span>
+                        <div class="input-size">
+                            <input type="text" name="height" placeholder="height"><br>
+                            <span>px</span>
+                        </div>
+                    </div>
+                </fieldset>
+                <fieldset>
+                    <legend>Specify format</legend>
+                    <label>Original:&nbsp;
+                        <input type="radio" name="format" value="original" checked>
+                    </label>
+                    <span>{{contentType}}</span>
+                    <br>
+                    <label>Custom:&nbsp;
+                        <input type="radio" name="format" value="custom">
+                    </label>
+                    <select name="formatname">
+                        <option value="jpg">JPEG</option>
+                        <option value="png">PNG</option>
+                        <option value="gif">GIF</option>
+                        <option value="bmp">BMP</option>
+                    </select>
+                </fieldset>
+
+            </div>
+            <div class="button-toolbar">
+                <input name="binary" type="hidden" value="{{binaryImageId}}"/>
+                <button type="submit" name="download" class="download-button">Download</button>
+                <button type="reset" name="cancel" onclick="toggleClass();" class="download-cancel">Cancel</button>
+            </div>
+        </form>
+    </div>
+    <div class="image-info-container" onclick="closeEditMode('{{binaryImageId}}', event);">
+        <img id="ixp-spinner" src="{{assetUrl}}/img/spinner.svg">
+        <div class="image-info-vertical-wrapper">
+            <div class="image-info-vertical-cell">
+                <div class="image-meta-container">
+                    <div class="image-caption">
+                        <img class="icon-edit" src="{{assetUrl}}/img/pencil.svg" title="Edit info" onclick="openEditMode(event);">
+                        <h1 class="caption-stored meta-editable">{{caption}}</h1>
+                        <input id="input-caption" type="text" class="info-meta-input" value="{{caption}}" onkeyup="onMetaInputKeyUp('{{binaryImageId}}', event);">
+                    </div>
+                    <div class="image-row">
+                        <div class="image-info-column">
+                            <h2 class="image-info-heading">Taken by</h2>
+                            <h3 class="image-info-meta artist-stored meta-editable">{{artist}}</h3>
+                            <input id="input-artist" type="text" class="info-meta-input" value="{{artist}}" onkeyup="onMetaInputKeyUp('{{binaryImageId}}', event);">
+                        </div>
+
+                        <div class="image-info-column">
+                            <h2 class="image-info-heading">Tags</h2>
+                            <h3 class="image-info-meta tags-stored meta-editable">{{tags}}</h3>
+                            <input id="input-tags" type="text" class="info-meta-input" value="{{tags}}" onkeyup="onMetaInputKeyUp('{{binaryImageId}}', event);">
+                        </div>
+                    </div>
+
+                    <div class="image-row">
+                        <div class="image-info-column">
+                            <h2 class="image-info-heading">Taken on</h2>
+                            <h3 class="image-info-meta">{{takenDate}}</h3>
+                        </div>
+
+                        <div class="image-info-column">
+                            <h2 class="image-info-heading">Published on</h2>
+                            <h3 class="image-info-meta">{{createdDate}}</h3>
+                        </div>
+                    </div>
+
+                    <div class="image-row">
+                        <div class="image-info-column">
+                            <h2 class="image-info-heading">Format</h2>
+                            <h3 class="image-info-meta">{{contentType}}</h3>
+                        </div>
+
+                        <div class="image-info-column">
+                            <h2 class="image-info-heading">Dimensions</h2>
+                            <h3 class="image-info-meta">{{imageWidth}}x{{imageHeight}}</h3>
+                        </div>
+                    </div>
+
+                    <div class="image-row">
+                        <div class="image-info-column">
+                            <h2 class="image-info-heading">Camera make</h2>
+                            <h3 class="image-info-meta">{{cameraMake}}</h3>
+                        </div>
+
+                        <div class="image-info-column">
+                            <h2 class="image-info-heading">Camera model</h2>
+                            <h3 class="image-info-meta">{{cameraModel}}</h3>
+                        </div>
+                    </div>
+
+
+                    {{#geoLocation}}
+                    <div class="image-row map">
+                        <div id="map" class="image-location"></div>
+                        <script type="application/javascript">
+                            var map;
+                            function initMap() {
+                                map = new google.maps.Map(document.getElementById('map'), {
+                                    center: {lat: {{lat}}, lng: {{lng}}},
+                                zoom: 10
+                            });
+                            }
+                        </script>
+                        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBfipgSkJAXgpsE3jr-PlDXi9mW3Uix5fM&callback=initMap"
+                                async defer></script>
+                    </div>
+                    {{/geoLocation}}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

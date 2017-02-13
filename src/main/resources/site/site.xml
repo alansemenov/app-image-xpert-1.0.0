@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+  <config>
+    <input name="searchResultMax" type="Long">
+      <label>Search result number maximum</label>
+      <occurrences minimum="1" maximum="1"/>
+      <default>50</default>
+    </input>
+  </config>
+
+  <mappings>
+    <mapping controller="/site/pages/image/image.js">
+      <pattern>/image</pattern>
+    </mapping>
+  </mappings>
+</site>
